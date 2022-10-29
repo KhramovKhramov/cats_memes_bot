@@ -4,6 +4,7 @@ from io import BytesIO
 from PIL import Image
 
 from db import db, get_random_pic
+from telegram import ReplyKeyboardMarkup
 
 
 def create_pic_from_bynary():
@@ -13,3 +14,11 @@ def create_pic_from_bynary():
     image.save(file_name)
 
     return file_name
+
+
+def main_keyboard():
+    return ReplyKeyboardMarkup([
+        ['Отправить мемас', 'Получить мемас'],
+        ['Подписаться', 'Отписаться'],
+        ['Пройти опрос']
+    ])

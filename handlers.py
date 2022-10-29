@@ -1,14 +1,16 @@
 import os
 
 from db import db, get_or_create_user, save_pic
-from utils import create_pic_from_bynary
+from utils import create_pic_from_bynary, main_keyboard
 
 
 def greet_user(update, context):
     user = get_or_create_user(
         db, update.effective_user,
         update.message.chat.id)
-    update.message.reply_text(f'Привет, котик {user["first_name"]}!')
+    update.message.reply_text(
+        f'Привет, котик {user["first_name"]}!',
+        reply_markup=main_keyboard())
 
 
 def want_to_send_pic(update, context):
