@@ -15,7 +15,8 @@ def greet_user(update, context):
 
 def want_to_send_pic(update, context):
     update.message.reply_text(
-        'Просто отправь мне мемас с котиком в любой момент')
+        'Просто отправь мне мемас с котиком в любой момент',
+        reply_markup=main_keyboard())
 
 
 def get_pic(update, context):
@@ -28,7 +29,9 @@ def get_pic(update, context):
     photo_file.download(file_name)
     save_pic(db, file_name)
     os.remove(file_name)
-    update.message.reply_text('Фото сохранено')
+    update.message.reply_text(
+        'Фото сохранено',
+        reply_markup=main_keyboard())
 
 
 def send_pic(update, context):
@@ -36,6 +39,7 @@ def send_pic(update, context):
     file_name = create_pic_from_bynary()
     context.bot.send_photo(
         chat_id=chat_id,
-        photo=open(file_name, 'rb')
+        photo=open(file_name, 'rb'),
+        reply_markup=main_keyboard()
     )
     os.remove(file_name)
