@@ -34,3 +34,11 @@ def save_pic(db, file_name):
         }
         db.pics.insert_one(pic)
 
+
+def get_random_pic(db):
+    files = db.pics.find()
+    random_pic = choice(list(files))
+    bynary = random_pic['bynary']
+    file_name = random_pic['file_name']
+
+    return bynary, file_name
