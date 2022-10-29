@@ -1,7 +1,7 @@
 import os
 
 from db import db, get_or_create_user, save_pic
-from utils import create_pic_from_bynary, main_keyboard
+from utils import create_pic_from_bynary, main_keyboard, has_oblect_on_images
 
 
 def greet_user(update, context):
@@ -27,11 +27,17 @@ def get_pic(update, context):
         'downloads',
         f'{update.message.photo[-1].file_id}.jpg')
     photo_file.download(file_name)
-    save_pic(db, file_name)
-    os.remove(file_name)
-    update.message.reply_text(
-        'Фото сохранено',
-        reply_markup=main_keyboard())
+    if has_oblect_on_images(file_name, object_name='cat'):
+        save_pic(db, file_name)
+        os.remove(file_name)
+        update.message.reply_text(
+            'Мемас сохранен!',
+            reply_markup=main_keyboard())
+    else:
+        os.remove(file_name)
+        update.message.reply_text(
+            'Тревога! Котик на мемасе не обнаружен!',
+            reply_markup=main_keyboard())
 
 
 def send_pic(update, context):
