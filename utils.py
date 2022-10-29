@@ -1,13 +1,15 @@
 from base64 import b64decode
 from io import BytesIO
+from random import choice
 
 from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
 from clarifai_grpc.grpc.api import resources_pb2, service_pb2, service_pb2_grpc
 from clarifai_grpc.grpc.api.status import status_code_pb2
+from emoji import emojize
 from PIL import Image
 from telegram import ReplyKeyboardMarkup
-import settings
 
+import settings
 from db import db, get_random_pic
 
 
@@ -56,3 +58,9 @@ def check_responce_for_object(response, object_name):
         print(f"Ошибка распознавания: {response.outputs[0].status.details}")
 
     return False
+
+
+def random_emoji():
+    emoji = emojize(choice(settings.USER_EMOJI), language='alias')
+
+    return emoji
