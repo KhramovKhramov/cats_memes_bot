@@ -1,3 +1,6 @@
+from base64 import b64encode
+from random import choice
+
 from pymongo import MongoClient
 
 import settings
@@ -20,3 +23,14 @@ def get_or_create_user(db, effective_user, chat_id):
         db.users.insert_one(user)
 
     return user
+
+
+def save_pic(db, file_name):
+    with open(f'{file_name}', 'rb') as f:
+        bynary = b64encode(f.read())
+        pic = {
+            'file_name': file_name,
+            'bynary': bynary
+        }
+        db.pics.insert_one(pic)
+
