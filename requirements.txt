@@ -1,10 +1,16 @@
 APScheduler==3.6.3
 cachetools==4.2.2
 certifi==2022.9.24
+charset-normalizer==2.1.1
+clarifai-grpc==7.11.0
 dnspython==2.2.1
 flake8==5.0.4
+googleapis-common-protos==1.56.4
+grpcio==1.50.0
+idna==3.4
 mccabe==0.7.0
 Pillow==9.2.0
+protobuf==3.20.0
 pycodestyle==2.9.1
 pyflakes==2.5.0
 pymongo==4.3.2
@@ -12,7 +18,9 @@ PySocks==1.7.1
 python-telegram-bot==13.14
 pytz==2022.5
 pytz-deprecation-shim==0.1.0.post0
+requests==2.28.1
 six==1.16.0
 tornado==6.1
 tzdata==2022.5
 tzlocal==4.2
+urllib3==1.26.12
