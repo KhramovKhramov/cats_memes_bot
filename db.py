@@ -4,6 +4,7 @@ from random import choice
 from pymongo import MongoClient
 
 import settings
+from datetime import datetime
 
 client = MongoClient(settings.MONGO_LINK)
 
@@ -42,3 +43,18 @@ def get_random_pic(db):
     file_name = random_pic['file_name']
 
     return bynary, file_name
+
+
+def save_anketa(db, user_id, anketa_data):
+    user = db.users.find_one({'user_id': user_id})
+    anketa_data['created'] = datetime.now()
+    if 'anketa' not in user:
+        db.users.update_one(
+            {'_id': user['_id']},
+            {'$set': {'anketa': [anketa_data]}}
+        )
+    else:
+        db.users.update_one(
+            {'_id': user['_id']},
+            {'$push': {'anketa': anketa_data}}
+        )
