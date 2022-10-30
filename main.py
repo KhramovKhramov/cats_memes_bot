@@ -5,7 +5,8 @@ from telegram.ext import (CommandHandler, ConversationHandler, Filters,
 
 import settings
 from anketa import anketa_comment, anketa_dontknow, anketa_rating, anketa_start
-from handlers import get_pic, greet_user, send_pic, want_to_send_pic
+from handlers import (get_pic, greet_user, send_pic, subscribe, unsubscribe,
+                      want_to_send_pic)
 
 logging.basicConfig(filename='bot.log', level=logging.INFO)
 
@@ -40,6 +41,12 @@ def main():
     dp.add_handler(MessageHandler(Filters.regex(
         '^(Получить мемас)$'),
         send_pic))
+    dp.add_handler(MessageHandler(Filters.regex(
+        '^(Подписаться)$'),
+        subscribe))
+    dp.add_handler(MessageHandler(Filters.regex(
+        '^(Отписаться)$'),
+        unsubscribe))
 
     logging.info('bot has started')
     mybot.start_polling()

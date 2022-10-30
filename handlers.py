@@ -1,6 +1,7 @@
 import os
-
-from db import db, get_or_create_user, save_pic
+from emoji import emojize
+from db import (db, get_or_create_user, save_pic, subscribe_user,
+                unsubscribe_user)
 from utils import (create_pic_from_bynary, has_oblect_on_images, main_keyboard,
                    random_emoji)
 
@@ -24,7 +25,8 @@ def want_to_send_pic(update, context):
 
 def get_pic(update, context):
     emoji = random_emoji()
-    update.message.reply_text(f'Спасибо, что прислал мемас, обрабатываю {emoji}')
+    update.message.reply_text(
+        f'Спасибо, что прислал мемас, обрабатываю {emoji}')
     os.makedirs('downloads', exist_ok=True)
     photo_file = context.bot.getFile(update.message.photo[-1].file_id)
     file_name = os.path.join(
@@ -53,3 +55,28 @@ def send_pic(update, context):
         reply_markup=main_keyboard()
     )
     os.remove(file_name)
+
+
+def subscribe(update, context):
+    user = get_or_create_user(
+        db, update.effective_user,
+        update.message.chat.id)
+    subscribe_user(db, user)
+    emoji = random_emoji()
+    update.message.reply_text(f'Котик, ты подписался на рассылку! {emoji}')
+    update.message.reply_text(
+        'Мемасы будут приходить каждый день в полдень по мск',
+        reply_markup=main_keyboard()
+    )
+
+
+def unsubscribe(update, context):
+    user = get_or_create_user(
+        db, update.effective_user,
+        update.message.chat.id)
+    unsubscribe_user(db, user)
+    emoji = emojize(':crying_cat_face:', language='alias')
+    update.message.reply_text(
+        f'Котик, ты отписался от рассылки {emoji}',
+        reply_markup=main_keyboard()
+    )
