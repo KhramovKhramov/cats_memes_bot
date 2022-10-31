@@ -1,4 +1,10 @@
 import logging
+import pytz
+from datetime import time
+from jobs import send_random_pic
+from telegram.bot import Bot
+from telegram.ext import messagequeue as mq
+from telegram.utils.request import Request
 
 from telegram.ext import (CommandHandler, ConversationHandler, Filters,
                           MessageHandler, Updater)
@@ -11,8 +17,32 @@ from handlers import (get_pic, greet_user, send_pic, subscribe, unsubscribe,
 logging.basicConfig(filename='bot.log', level=logging.INFO)
 
 
+class MQBot(Bot):
+    def __init__(self, *args, is_queued_def=True, msg_queue=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._is_messages_queued_default = is_queued_def
+        self._msg_queue = msg_queue or mq.MessageQueue()
+
+    def __del__(self):
+        try:
+            self._msg_queue.stop()
+        except:
+            pass
+
+    @mq.queuedmessage
+    def send_message(self, *args, **kwargs):
+        return super().send_message(*args, **kwargs)
+
+
 def main():
-    mybot = Updater(settings.API_KEY)
+    request = Request(con_pool_size=8)
+    bot = MQBot(settings.API_KEY, request=request)
+    mybot = Updater(bot=bot)
+
+    jq = mybot.job_queue
+    target_time = time(12, 0, tzinfo=pytz.timezone('Europe/Moscow'))
+    jq.run_daily(send_random_pic, target_time, days=(0, 1, 2, 3, 4, 5, 6))
+
     dp = mybot.dispatcher
 
     anketa = ConversationHandler(
